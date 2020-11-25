@@ -10,8 +10,9 @@ import 'Tile.dart';
 import 'dart:math';
 
 class Grid {
-  static int COLS = 10;
-  static int ROWS = 10;
+  static int COLS = 40;
+  static int ROWS = 40;
+  static int SLEEP = 200;
 
   Random random = new Random();
   List<Agent> agents = new List();
@@ -45,7 +46,7 @@ class Grid {
         objects[newLoc] = a;
       }
       printGrid();
-      sleep(Duration(seconds: 1));
+      sleep(Duration(milliseconds: SLEEP));
     }
   }
 
