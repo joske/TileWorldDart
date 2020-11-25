@@ -93,9 +93,20 @@ class Grid {
     return objects[l] == null;
   }
 
+  bool isValidMove(Location location, int dir) {
+    if (dir == Direction.DIR_UP)
+      return location.row > 0 && isFree(location.nextLocation(dir));
+    else if (dir == Direction.DIR_DOWN)
+      return location.row < ROWS - 1 && isFree(location.nextLocation(dir));
+    else if (dir == Direction.DIR_LEFT)
+      return location.col > 0 && isFree(location.nextLocation(dir));
+    else
+      return location.col < COLS - 1 && isFree(location.nextLocation(dir));
+  }
+
   void printGrid() {
-    for (var c = 0; c < COLS - 1; c++) {
-      for (var r = 0; r < ROWS - 1; r++) {
+    for (var r = 0; r < ROWS; r++) {
+      for (var c = 0; c < COLS; c++) {
         var o = objects[new Location(c, r)];
         if (o != null) {
           if (o is Agent) {
@@ -119,7 +130,9 @@ class Grid {
     int closest = 10000000;
     Tile best = null;
     for (Tile t in tiles) {
-      if (t.location.distance(location) < closest) {
+      var distance = t.location.distance(location);
+      if (distance < closest) {
+        closest = distance;
         best = t;
       }
     }
@@ -130,7 +143,9 @@ class Grid {
     int closest = 10000000;
     Hole best = null;
     for (Hole h in holes) {
-      if (h.location.distance(location) < closest) {
+      var distance = h.location.distance(location);
+      if (distance < closest) {
+        closest = distance;
         best = h;
       }
     }

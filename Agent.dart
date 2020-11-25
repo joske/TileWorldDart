@@ -59,8 +59,8 @@ class Agent extends GridObject {
       dumpTile();
       return;
     }
-    if (grid.objects[tile.location] != tile) {
-      // our tile has gone
+    if (grid.objects[hole.location] != hole) {
+      // our hole has gone
       state = State.IDLE;
       return;
     }
@@ -76,23 +76,36 @@ class Agent extends GridObject {
   Direction findBestMove(Location to) {
     int r = grid.random.nextInt(100);
     if (r < 20) {
+      print(toString() + " random move");
       int dir = grid.random.nextInt(4); // exclusive end: 0..3
+      while (!grid.isValidMove(location, dir)) {
+        dir = grid.random.nextInt(4); // exclusive end: 0..3
+      }
       return Direction.of(dir);
     }
     int bestDir = 0;
     int minDist = 1000000;
     for (var dir = 1; dir <= 4; dir++) {
+      print(toString() + " considering " + dir.toString());
       Location nextLocation = location.nextLocation(dir);
       if (nextLocation == to) {
+        print("next location leads to destination");
+        bestDir = dir;
         // arrived
-        return Direction.of(dir);
+        break;
       }
-      if (grid.isFree(nextLocation)) {
+      if (grid.isValidMove(location, dir)) {
+        print("is valid");
         int dist = nextLocation.distance(to);
         if (dist < minDist) {
+          print(" and closer to destination: " + dist.toString());
           minDist = dist;
           bestDir = dir;
+        } else {
+          print(" but further from destination: " + dist.toString());
         }
+      } else {
+        print("is not valid");
       }
     }
     return Direction.of(bestDir);
@@ -113,10 +126,10 @@ class Agent extends GridObject {
 
   void dumpTile() {
     print(this.toString() + ": dumpTile");
+    grid.removeHole(hole);
     tile = null;
     hole = null;
     hasTile = false;
-    grid.removeHole(hole);
     state = State.IDLE;
   }
 
