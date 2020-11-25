@@ -37,18 +37,20 @@ class Agent extends GridObject {
     if (tile.location == this.location) {
       // we have arrived;
       pickTile();
-      hole = grid.getClosestHole(this.location);
-      state = State.MOVE_TO_HOLE;
       return;
+    }
+    if (grid.objects[tile.location] != tile) {
+      // our tile has gone
+      state = State.IDLE;
+      return;
+    }
+    Tile potentialTile = grid.getClosestTile(this.location);
+    if (potentialTile != tile) {
+      // this one is closer now
+      tile = potentialTile;
     }
     Direction bestDir = findBestMove(tile.location);
     nextMove(bestDir);
-  }
-
-  void pickTile() {
-    print("Agent " + this.toString() + ": pickTile");
-    hasTile = true;
-    grid.removeTile(tile);
   }
 
   void moveToHole() {
@@ -56,6 +58,16 @@ class Agent extends GridObject {
       // we have arrived;
       dumpTile();
       return;
+    }
+    if (grid.objects[tile.location] != tile) {
+      // our tile has gone
+      state = State.IDLE;
+      return;
+    }
+    Hole potentialHole = grid.getClosestHole(this.location);
+    if (potentialHole != hole) {
+      // this one is closer now
+      hole = potentialHole;
     }
     Direction bestDir = findBestMove(hole.location);
     nextMove(bestDir);
@@ -87,12 +99,20 @@ class Agent extends GridObject {
   }
 
   void nextMove(Direction bestDir) {
-    print("Agent " + toString() + " move: " + bestDir.dir.toString());
+    print(toString() + " move: " + bestDir.dir.toString());
     this.location = this.location.nextLocation(bestDir.dir);
   }
 
+  void pickTile() {
+    print(toString() + ": pickTile");
+    hasTile = true;
+    hole = grid.getClosestHole(this.location);
+    state = State.MOVE_TO_HOLE;
+    grid.removeTile(tile);
+  }
+
   void dumpTile() {
-    print("Agent " + this.toString() + ": pickTile");
+    print(this.toString() + ": dumpTile");
     tile = null;
     hole = null;
     hasTile = false;
@@ -101,6 +121,17 @@ class Agent extends GridObject {
   }
 
   String toString() {
-    return "Agent " + this.num.toString() + " at " + location.toString();
+    return "Agent " +
+        this.num.toString() +
+        " at " +
+        location.toString() +
+        " hasTile=" +
+        hasTile.toString() +
+        " state=" +
+        state.toString() +
+        " tile=" +
+        tile.toString() +
+        " hole=" +
+        hole.toString();
   }
 }
