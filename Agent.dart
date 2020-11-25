@@ -127,6 +127,7 @@ class Agent extends GridObject {
   void dumpTile() {
     print(this.toString() + ": dumpTile");
     grid.removeHole(hole);
+    score += tile.score;
     tile = null;
     hole = null;
     hasTile = false;

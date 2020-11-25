@@ -59,7 +59,8 @@ class Grid {
 
   void createTile(int i) {
     Location l = randomFreeLocation();
-    var tile = new Tile(this, i, l);
+    int score = random.nextInt(6) + 1;
+    var tile = new Tile(this, i, l, score);
     tiles.add(tile);
     objects[l] = tile;
   }
@@ -124,6 +125,9 @@ class Grid {
         }
       }
       print("");
+    }
+    for (Agent a in agents) {
+      print("Agent " + a.num.toString() + ": " + a.score.toString());
     }
   }
 
