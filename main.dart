@@ -1,3 +1,4 @@
+#!/usr/bin/env dart
 import 'Grid.dart';
 
 void main() {
