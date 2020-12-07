@@ -112,7 +112,11 @@ class Grid {
         var o = objects[new Location(c, r)];
         if (o != null) {
           if (o is Agent) {
-            stdout.write("A");
+            if ((o as Agent).hasTile) {
+              stdout.write("Å");
+            } else {
+              stdout.write("A");
+            }
           } else if (o is Tile) {
             stdout.write("T");
           } else if (o is Hole) {

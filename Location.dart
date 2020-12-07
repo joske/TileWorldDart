@@ -59,6 +59,22 @@ class Location {
     return other is Location && col == other.col && row == other.row;
   }
 
+  Direction getDirection(Location other) {
+    if (row == other.row) {
+      if (col == other.col + 1) {
+        return Direction.LEFT;
+      } else {
+        return Direction.RIGHT;
+      }
+    } else {
+      if (row == other.row + 1) {
+        return Direction.UP;
+      } else {
+        return Direction.DOWN;
+      }
+    }
+  }
+
   int get hashCode => col.hashCode ^ row.hashCode;
 
   String toString() {
