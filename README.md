@@ -1,11 +1,9 @@
 # TileWorldDart
 
-sudo apt-get install dart
+install dart SDK & flutter with desktop support
 
 git clone git@github.com:joske/TileWorldDart.git
 
 cd TileWorldDart
 
-chmod +x main.dart
-
-./main.dart
+flutter run
