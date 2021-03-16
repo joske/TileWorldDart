@@ -10,10 +10,10 @@ enum State { IDLE, MOVE_TO_TILE, MOVE_TO_HOLE }
 class Agent extends GridObject {
   State state = State.IDLE;
   int score = 0;
-  Tile tile = null;
-  Hole hole = null;
+  Tile? tile;
+  Hole? hole;
   bool hasTile = false;
-  List<Direction> path = new List();
+  List<Direction> path = [];
 
   Agent(Grid grid, int num, Location location) : super(grid, num, location);
 
@@ -36,25 +36,25 @@ class Agent extends GridObject {
   }
 
   void moveToTile() {
-    if (tile.location == this.location) {
+    if (tile?.location == this.location) {
       // we have arrived;
       pickTile();
       return;
     }
-    if (grid.objects[tile.location] != tile) {
+    if (grid.objects[tile?.location] != tile) {
       // our tile has gone
       state = State.IDLE;
       return;
     }
-    Tile potentialTile = grid.getClosestTile(this.location);
+    Tile? potentialTile = grid.getClosestTile(this.location);
     if (potentialTile != tile) {
       // this one is closer now
       tile = potentialTile;
     }
     if (path.isEmpty) {
-      path = PathStrategy.shortestPath(grid, location, tile.location);
+      path = PathStrategy.shortestPath(grid, location, tile!.location);
     }
-    if (!path.isEmpty) {
+    if (path.isNotEmpty) {
       Direction bestDir = path.removeAt(0);
       nextMove(bestDir);
     } else {
@@ -63,25 +63,25 @@ class Agent extends GridObject {
   }
 
   void moveToHole() {
-    if (hole.location == this.location) {
+    if (hole?.location == this.location) {
       // we have arrived;
       dumpTile();
       return;
     }
-    if (grid.objects[hole.location] != hole) {
+    if (grid.objects[hole?.location] != hole) {
       // our hole has gone
       state = State.IDLE;
       return;
     }
-    Hole potentialHole = grid.getClosestHole(this.location);
+    Hole? potentialHole = grid.getClosestHole(this.location);
     if (potentialHole != hole) {
       // this one is closer now
       hole = potentialHole;
     }
     if (path.isEmpty) {
-      path = PathStrategy.shortestPath(grid, location, hole.location);
+      path = PathStrategy.shortestPath(grid, location, hole!.location);
     }
-    if (!path.isEmpty) {
+    if (path.isNotEmpty) {
       Direction bestDir = path.removeAt(0);
       nextMove(bestDir);
     } else {
@@ -99,13 +99,13 @@ class Agent extends GridObject {
     hasTile = true;
     hole = grid.getClosestHole(this.location);
     state = State.MOVE_TO_HOLE;
-    grid.removeTile(tile);
+    grid.removeTile(tile!);
   }
 
   void dumpTile() {
     print(this.toString() + ": dumpTile");
-    grid.removeHole(hole);
-    score += tile.score;
+    grid.removeHole(hole!);
+    score += tile!.score;
     tile = null;
     hole = null;
     hasTile = false;

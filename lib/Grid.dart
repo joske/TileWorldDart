@@ -1,6 +1,8 @@
 import 'dart:collection';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+
 import 'Agent.dart';
 import 'GridObject.dart';
 import 'Hole.dart';
@@ -9,17 +11,18 @@ import 'Obstacle.dart';
 import 'Tile.dart';
 import 'dart:math';
 
-class Grid {
-  static int COLS = 40;
-  static int ROWS = 40;
-  static int SLEEP = 200;
+class Grid with ChangeNotifier {
+  static const int COLS = 40;
+  static const int ROWS = 40;
+  static const int SLEEP = 200;
+  static const double MAG = 20;
 
   Random random = new Random();
-  List<Agent> agents = new List();
-  List<Tile> tiles = new List();
-  List<Hole> holes = new List();
-  List<Obstacle> obstacles = new List();
-  Map<Location, GridObject> objects = new HashMap();
+  List<Agent> agents = [];
+  List<Tile> tiles = [];
+  List<Hole> holes = [];
+  List<Obstacle> obstacles = [];
+  Map<Location, GridObject?> objects = new HashMap();
 
   Grid(int numAgents, int numTiles, int numHoles, int numObstacles) {
     for (var i = 0; i < numAgents; i++) {
@@ -38,15 +41,20 @@ class Grid {
 
   void start() {
     while (true) {
-      for (Agent a in agents) {
-        Location orig = a.location;
-        a.update();
-        Location newLoc = a.location;
-        objects[orig] = null;
-        objects[newLoc] = a;
-      }
+      update();
       printGrid();
       sleep(Duration(milliseconds: SLEEP));
+    }
+  }
+
+  void update() {
+    for (Agent a in agents) {
+      Location orig = a.location;
+      a.update();
+      Location newLoc = a.location;
+      objects[orig] = null;
+      objects[newLoc] = a;
+      notifyListeners();
     }
   }
 
@@ -112,7 +120,7 @@ class Grid {
         var o = objects[new Location(c, r)];
         if (o != null) {
           if (o is Agent) {
-            if ((o as Agent).hasTile) {
+            if ((o).hasTile) {
               stdout.write("Å");
             } else {
               stdout.write("A");
@@ -135,9 +143,9 @@ class Grid {
     }
   }
 
-  Tile getClosestTile(Location location) {
+  Tile? getClosestTile(Location location) {
     int closest = 10000000;
-    Tile best = null;
+    Tile? best;
     for (Tile t in tiles) {
       var distance = t.location.distance(location);
       if (distance < closest) {
@@ -148,9 +156,9 @@ class Grid {
     return best;
   }
 
-  Hole getClosestHole(Location location) {
+  Hole? getClosestHole(Location location) {
     int closest = 10000000;
-    Hole best = null;
+    Hole? best;
     for (Hole h in holes) {
       var distance = h.location.distance(location);
       if (distance < closest) {

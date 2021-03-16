@@ -5,12 +5,12 @@ import 'dart:collection';
 class PathStrategy {
   static List<Direction> shortestPath(Grid grid, Location from, Location to) {
     print("finding path from " + to.toString() + " to " + to.toString());
-    List<Location> list = new List();
+    List<Location> list = [];
     SplayTreeMap<int, List> queue = new SplayTreeMap();
     list.add(from);
     queue[0] = list;
-    while (!queue.isEmpty) {
-      List<Location> path = queue.remove(queue.firstKey());
+    while (queue.isNotEmpty) {
+      List<Location> path = queue.remove(queue.firstKey()) as List<Location>;
       Location last = path[path.length - 1];
       if (last == to) {
         // path to destination
@@ -21,7 +21,7 @@ class PathStrategy {
       generateNext(grid, to, path, queue, Direction.DIR_LEFT);
       generateNext(grid, to, path, queue, Direction.DIR_RIGHT);
     }
-    return new List();
+    return [];
   }
 
   static void generateNext(Grid grid, Location to, List<Location> path,
@@ -56,7 +56,7 @@ class PathStrategy {
 
 // make a list of directions from a list of locations
   static List<Direction> makePath(List<Location> list) {
-    List<Direction> path = new List();
+    List<Direction> path = [];
     var last = list.removeAt(0);
     for (Location loc in list) {
       Direction dir = last.getDirection(loc);

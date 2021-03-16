@@ -10,7 +10,7 @@ class Direction {
   static Direction RIGHT = new Direction(DIR_RIGHT);
 
   int dir;
-  Direction(this.dir) {}
+  Direction(this.dir);
 
   static Direction of(int dir) {
     if (dir == DIR_UP) {
@@ -38,16 +38,12 @@ class Location {
     switch (dir) {
       case Direction.DIR_UP:
         return new Location(_col, _row - 1);
-        break;
       case Direction.DIR_DOWN:
         return new Location(_col, _row + 1);
-        break;
       case Direction.DIR_LEFT:
         return new Location(_col - 1, _row);
-        break;
       default:
         return new Location(_col + 1, _row);
-        break;
     }
   }
 
