@@ -39,14 +39,6 @@ class Grid with ChangeNotifier {
     }
   }
 
-  void start() {
-    while (true) {
-      update();
-      printGrid();
-      sleep(Duration(milliseconds: SLEEP));
-    }
-  }
-
   void update() {
     for (Agent a in agents) {
       Location orig = a.location;
@@ -54,6 +46,7 @@ class Grid with ChangeNotifier {
       Location newLoc = a.location;
       objects[orig] = null;
       objects[newLoc] = a;
+      printGrid();
       notifyListeners();
     }
   }

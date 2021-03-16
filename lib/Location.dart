@@ -4,23 +4,23 @@ class Direction {
   static const int DIR_LEFT = 3;
   static const int DIR_RIGHT = 4;
 
-  static Direction UP = new Direction(DIR_UP);
-  static Direction DOWN = new Direction(DIR_DOWN);
-  static Direction LEFT = new Direction(DIR_LEFT);
-  static Direction RIGHT = new Direction(DIR_RIGHT);
+  static Direction up = new Direction(DIR_UP);
+  static Direction down = new Direction(DIR_DOWN);
+  static Direction left = new Direction(DIR_LEFT);
+  static Direction right = new Direction(DIR_RIGHT);
 
   int dir;
   Direction(this.dir);
 
   static Direction of(int dir) {
     if (dir == DIR_UP) {
-      return UP;
+      return up;
     } else if (dir == DIR_DOWN) {
-      return DOWN;
+      return down;
     } else if (dir == DIR_LEFT) {
-      return LEFT;
+      return left;
     } else {
-      return RIGHT;
+      return right;
     }
   }
 }
@@ -58,15 +58,15 @@ class Location {
   Direction getDirection(Location other) {
     if (row == other.row) {
       if (col == other.col + 1) {
-        return Direction.LEFT;
+        return Direction.left;
       } else {
-        return Direction.RIGHT;
+        return Direction.right;
       }
     } else {
       if (row == other.row + 1) {
-        return Direction.UP;
+        return Direction.up;
       } else {
-        return Direction.DOWN;
+        return Direction.down;
       }
     }
   }

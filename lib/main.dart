@@ -9,14 +9,14 @@ import 'Grid.dart';
 import 'View.dart';
 
 void main() {
-  Grid grid = Grid(6, 20, 20, 20);
+  final Grid grid = Grid(6, 20, 20, 20);
   runApp(MyApp(grid));
   const delay = const Duration(milliseconds:200);
   new Timer.periodic(delay, (Timer t) => grid.update());
 }
 
 class MyApp extends StatelessWidget {
-  late Grid grid;
+  late final Grid grid;
 
   MyApp(Grid grid) {
     this.grid = grid;
