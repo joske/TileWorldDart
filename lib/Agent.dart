@@ -1,8 +1,9 @@
+import 'package:tileworld/Astar.dart';
+
 import 'Grid.dart';
 import 'GridObject.dart';
 import 'Hole.dart';
 import 'Location.dart';
-import 'PathStrategy.dart';
 import 'Tile.dart';
 
 enum State { IDLE, MOVE_TO_TILE, MOVE_TO_HOLE }
@@ -52,7 +53,7 @@ class Agent extends GridObject {
       tile = potentialTile;
     }
     if (path.isEmpty) {
-      path = PathStrategy.shortestPath(grid, location, tile!.location);
+      path = AStarStrategy.shortestPath(grid, location, tile!.location);
     }
     if (path.isNotEmpty) {
       Direction bestDir = path.removeAt(0);
@@ -79,7 +80,7 @@ class Agent extends GridObject {
       hole = potentialHole;
     }
     if (path.isEmpty) {
-      path = PathStrategy.shortestPath(grid, location, hole!.location);
+      path = AStarStrategy.shortestPath(grid, location, hole!.location);
     }
     if (path.isNotEmpty) {
       Direction bestDir = path.removeAt(0);
