@@ -28,7 +28,8 @@ class View extends CustomPainter {
               canvas.drawRect(Offset(x, y) & Size(Grid.MAG, Grid.MAG), fill);
               canvas.drawArc(Offset(x, y) & Size(Grid.MAG, Grid.MAG), 0, 2 * pi,
                   false, fill);
-              drawText(canvas, o.tile!.score.toString(), x, y, Color(getColor(o.num)));
+              drawText(canvas, o.tile!.score.toString(), x, y,
+                  Color(getColor(o.num)));
             } else {
               var fill = Paint()
                 ..color = Color(getColor(o.num))
@@ -57,6 +58,14 @@ class View extends CustomPainter {
         }
       }
     }
+    double x = Grid.COLS * Grid.MAG + 50;
+    double y = 20;
+    grid.agents.forEach((a) {
+      Color c = Color(getColor(a.num));
+      int id = a.num;
+      String text = "Agent($id): ${a.score}";
+      drawText(canvas, text, x, y + id * Grid.MAG, c);
+    });
   }
 
   void drawText(Canvas canvas, String text, double x, double y, Color color) {
