@@ -8,12 +8,21 @@ import "dart:math" show pi;
 
 class View extends CustomPainter {
   late Grid grid;
+  late Paint strokeBlack;
+  late Paint fillBlack;
 
   View(Grid grid) {
     this.grid = grid;
+    this.strokeBlack = Paint()
+      ..color = Color(0xff000000)
+      ..style = PaintingStyle.stroke;
+    this.fillBlack = Paint()
+      ..color = Color(0xff000000)
+      ..style = PaintingStyle.fill;
   }
   @override
   void paint(Canvas canvas, Size size) {
+    canvas.drawRect(Offset(0, 0) & Size(Grid.COLS * Grid.MAG, Grid.ROWS * Grid.MAG), strokeBlack);
     for (var r = 0; r < Grid.ROWS; r++) {
       for (var c = 0; c < Grid.COLS; c++) {
         var o = grid.objects[new Location(c, r)];
@@ -21,39 +30,23 @@ class View extends CustomPainter {
           double x = c * Grid.MAG;
           double y = r * Grid.MAG;
           if (o is Agent) {
+            var strokeColor = Paint()
+              ..color = Color(getColor(o.num))
+              ..style = PaintingStyle.stroke;
             if (o.hasTile) {
-              var fill = Paint()
-                ..color = Color(getColor(o.num))
-                ..style = PaintingStyle.stroke;
-              canvas.drawRect(Offset(x, y) & Size(Grid.MAG, Grid.MAG), fill);
-              canvas.drawArc(Offset(x, y) & Size(Grid.MAG, Grid.MAG), 0, 2 * pi,
-                  false, fill);
-              drawText(canvas, o.tile!.score.toString(), x, y,
-                  Color(getColor(o.num)));
+              canvas.drawRect(Offset(x, y) & Size(Grid.MAG, Grid.MAG), strokeColor);
+              canvas.drawArc(Offset(x, y) & Size(Grid.MAG, Grid.MAG), 0, 2 * pi, false, strokeColor);
+              drawText(canvas, o.tile!.score.toString(), x, y, Color(getColor(o.num)));
             } else {
-              var fill = Paint()
-                ..color = Color(getColor(o.num))
-                ..style = PaintingStyle.stroke;
-              canvas.drawRect(Offset(x, y) & Size(Grid.MAG, Grid.MAG), fill);
+              canvas.drawRect(Offset(x, y) & Size(Grid.MAG, Grid.MAG), strokeColor);
             }
           } else if (o is Tile) {
-            var fill = Paint()
-              ..color = Color(0xff000000)
-              ..style = PaintingStyle.stroke;
-            canvas.drawArc(Offset(x, y) & Size(Grid.MAG, Grid.MAG), 0, 2 * pi,
-                false, fill);
+            canvas.drawArc(Offset(x, y) & Size(Grid.MAG, Grid.MAG), 0, 2 * pi, false, strokeBlack);
             drawText(canvas, o.score.toString(), x, y, Colors.black);
           } else if (o is Hole) {
-            var fill = Paint()
-              ..color = Color(0xff000000)
-              ..style = PaintingStyle.fill;
-            canvas.drawArc(Offset(x, y) & Size(Grid.MAG, Grid.MAG), 0, 2 * pi,
-                false, fill);
+            canvas.drawArc(Offset(x, y) & Size(Grid.MAG, Grid.MAG), 0, 2 * pi, false, fillBlack);
           } else {
-            var fill = Paint()
-              ..color = Color(0xff000000)
-              ..style = PaintingStyle.fill;
-            canvas.drawRect(Offset(x, y) & Size(Grid.MAG, Grid.MAG), fill);
+            canvas.drawRect(Offset(x, y) & Size(Grid.MAG, Grid.MAG), fillBlack);
           }
         }
       }
@@ -69,12 +62,8 @@ class View extends CustomPainter {
   }
 
   void drawText(Canvas canvas, String text, double x, double y, Color color) {
-    TextSpan span =
-        new TextSpan(style: new TextStyle(color: color), text: text);
-    TextPainter tp = new TextPainter(
-        text: span,
-        textAlign: TextAlign.left,
-        textDirection: TextDirection.ltr);
+    TextSpan span = new TextSpan(style: new TextStyle(color: color), text: text);
+    TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.left, textDirection: TextDirection.ltr);
     tp.layout();
     tp.paint(canvas, new Offset(x + Grid.MAG / 4, y));
   }

@@ -24,8 +24,7 @@ class PathStrategy {
     return [];
   }
 
-  static void generateNext(Grid grid, Location to, List<Location> path,
-      SplayTreeMap<int, List> queue, int direction) {
+  static void generateNext(Grid grid, Location to, List<Location> path, SplayTreeMap<int, List> queue, int direction) {
     print("generateNext " + direction.toString());
     var last = path.last;
     var nextLocation = last.nextLocation(direction);
@@ -35,8 +34,7 @@ class PathStrategy {
       if (!hasLoop(newPath, nextLocation)) {
         newPath.add(nextLocation);
         int cost = newPath.length + nextLocation.distance(to);
-        print(
-            "no loop, adding #{nextLocation} at cost #{cost} to path: #{newPath}");
+        print("no loop, adding #{nextLocation} at cost #{cost} to path: #{newPath}");
         queue[cost] = newPath;
       }
     } else {

@@ -23,18 +23,20 @@ class Grid with ChangeNotifier {
   List<Hole> holes = [];
   List<Obstacle> obstacles = [];
   Map<Location, GridObject?> objects = new HashMap();
+  int numTiles = 0;
 
-  Grid(int numAgents, int numTiles, int numHoles, int numObstacles) {
+  Grid(int numAgents, int numTiles) {
+    this.numTiles = numTiles;
     for (var i = 0; i < numAgents; i++) {
       createAgent(i);
     }
     for (var i = 0; i < numTiles; i++) {
       createTile(i);
     }
-    for (var i = 0; i < numHoles; i++) {
+    for (var i = 0; i < numTiles; i++) {
       createHole(i);
     }
-    for (var i = 0; i < numObstacles; i++) {
+    for (var i = 0; i < numTiles; i++) {
       createObstacle(i);
     }
   }
@@ -46,7 +48,7 @@ class Grid with ChangeNotifier {
       Location newLoc = a.location;
       objects[orig] = null;
       objects[newLoc] = a;
-      printGrid();
+      // printGrid();
       notifyListeners();
     }
   }
@@ -162,15 +164,17 @@ class Grid with ChangeNotifier {
     return best;
   }
 
-  void removeTile(Tile tile) {
+  void removeTile(Agent agent, Tile tile) {
     tiles.remove(tile);
     objects[tile.location] = null;
     createTile(tile.num);
+    assert(tiles.length == numTiles);
   }
 
-  void removeHole(Hole hole) {
+  void removeHole(Agent agent, Hole hole) {
     holes.remove(hole);
     objects[hole.location] = null;
     createHole(hole.num);
+    assert(holes.length == numTiles);
   }
 }

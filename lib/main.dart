@@ -9,9 +9,9 @@ import 'Grid.dart';
 import 'View.dart';
 
 void main() {
-  final Grid grid = Grid(6, 20, 20, 20);
+  final Grid grid = Grid(6, 20);
   runApp(MyApp(grid));
-  const delay = const Duration(milliseconds:200);
+  const delay = const Duration(milliseconds: 200);
   new Timer.periodic(delay, (Timer t) => grid.update());
 }
 
@@ -40,7 +40,7 @@ class CustomView extends StatelessWidget {
     return Container(
       color: Colors.white,
       child: CustomPaint(
-        size: Size(Grid.COLS * Grid.MAG, Grid.ROWS * Grid.MAG),
+        size: Size(Grid.COLS * Grid.MAG + 200, Grid.ROWS * Grid.MAG),
         painter: View(grid),
       ),
     );

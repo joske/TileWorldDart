@@ -14,11 +14,11 @@ class Agent extends GridObject {
   Tile? tile;
   Hole? hole;
   bool hasTile = false;
-  List<Direction> path = [];
 
   Agent(Grid grid, int num, Location location) : super(grid, num, location);
 
   void update() {
+    print(this);
     if (state == State.IDLE) {
       idle();
     } else if (state == State.MOVE_TO_TILE) {
@@ -52,11 +52,9 @@ class Agent extends GridObject {
       // this one is closer now
       tile = potentialTile;
     }
-    if (path.isEmpty) {
-      path = AStarStrategy.shortestPath(grid, location, tile!.location);
-    }
+    List<Location> path = AStarStrategy.shortestPath(grid, location, tile!.location);
     if (path.isNotEmpty) {
-      Direction bestDir = path.removeAt(0);
+      Location bestDir = path.removeAt(0);
       nextMove(bestDir);
     } else {
       print(toString() + " failed to find a path");
@@ -79,20 +77,18 @@ class Agent extends GridObject {
       // this one is closer now
       hole = potentialHole;
     }
-    if (path.isEmpty) {
-      path = AStarStrategy.shortestPath(grid, location, hole!.location);
-    }
+    List<Location> path = AStarStrategy.shortestPath(grid, location, hole!.location);
     if (path.isNotEmpty) {
-      Direction bestDir = path.removeAt(0);
+      print("got path " + path.toString());
+      Location bestDir = path.removeAt(0);
       nextMove(bestDir);
     } else {
       print(toString() + "failed to find a path");
     }
   }
 
-  void nextMove(Direction bestDir) {
-    print(toString() + " move: " + bestDir.dir.toString());
-    this.location = this.location.nextLocation(bestDir.dir);
+  void nextMove(Location bestDir) {
+    this.location = bestDir;
   }
 
   void pickTile() {
@@ -100,12 +96,12 @@ class Agent extends GridObject {
     hasTile = true;
     hole = grid.getClosestHole(this.location);
     state = State.MOVE_TO_HOLE;
-    grid.removeTile(tile!);
+    grid.removeTile(this, tile!);
   }
 
   void dumpTile() {
     print(this.toString() + ": dumpTile");
-    grid.removeHole(hole!);
+    grid.removeHole(this, hole!);
     score += tile!.score;
     tile = null;
     hole = null;
