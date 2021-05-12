@@ -166,14 +166,14 @@ class Grid with ChangeNotifier {
 
   void removeTile(Agent agent, Tile tile) {
     tiles.remove(tile);
-    objects[tile.location] = null;
+    objects[tile.location] = agent;
     createTile(tile.num);
     assert(tiles.length == numTiles);
   }
 
   void removeHole(Agent agent, Hole hole) {
     holes.remove(hole);
-    objects[hole.location] = null;
+    objects[hole.location] = agent;
     createHole(hole.num);
     assert(holes.length == numTiles);
   }

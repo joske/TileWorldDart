@@ -103,10 +103,10 @@ class Agent extends GridObject {
     print(this.toString() + ": dumpTile");
     grid.removeHole(this, hole!);
     score += tile!.score;
-    tile = null;
-    hole = null;
     hasTile = false;
-    state = State.IDLE;
+    tile = grid.getClosestTile(location);
+    hole = null;
+    state = State.MOVE_TO_TILE;
   }
 
   String toString() {
